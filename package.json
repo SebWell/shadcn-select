@@ -1,26 +1,26 @@
 {
   "name": "shadcn-select",
   "version": "1.0.0",
-  "description": "Shadcn/UI Select component for Weweb",
-  "main": "src/Select.vue",
+  "description": "Shadcn/UI select component for Weweb",
+  "main": "src/select.vue",
+  "weweb": {
+    "componentPath": "./src/select.vue"
+  },
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "serve": "webpack serve --mode development",
+    "build": "webpack --mode production"
   },
   "keywords": [
     "weweb",
     "shadcn",
     "ui",
-    "Select",
+    "select",
     "vue",
     "component"
   ],
-  "author": "Shadcn/UI for Weweb Community",
+  "author": "Shadcn/UI for Weweb",
   "license": "MIT",
   "dependencies": {
     "vue": "^3.3.4"
-  },
-  "devDependencies": {
-    "@vue/cli-service": "^5.0.8"
   }
 }
