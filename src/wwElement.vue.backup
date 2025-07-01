@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" :class="cn('w-full', customClass)">
+  <div class="relative" :class="cn('w-full', content.customClass)">
     <!-- Select Trigger -->
     <button
       ref="triggerRef"
@@ -7,19 +7,19 @@
       role="combobox"
       :aria-expanded="isOpen"
       :aria-haspopup="true"
-      :disabled="disabled"
+      :disabled="content.disabled"
       @click="toggleSelect"
       @keydown="handleKeyDown"
-      :class="cn(selectVariants({ variant: variant, size: size }), 
-        disabled && 'pointer-events-none opacity-50',
-        customClass
+      :class="cn(selectVariants({ variant: content.variant, size: content.size }), 
+        content.disabled && 'pointer-events-none opacity-50',
+        content.customClass
       )"
     >
       <span v-if="selectedOption" class="block truncate">
         {{ getDisplayValue(selectedOption) }}
       </span>
       <span v-else class="block truncate text-muted-foreground">
-        {{ placeholder || 'Select an option...' }}
+        {{ content.placeholder || 'Select an option...' }}
       </span>
       
       <!-- Chevron Icon -->
@@ -43,18 +43,18 @@
         :class="cn(
           'absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md',
           'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-          contentClass
+          content.contentClass
         )"
       >
         <!-- Search Input (if searchable) -->
-        <div v-if="searchable" class="flex items-center border-b px-3 pb-2">
+        <div v-if="content.searchable" class="flex items-center border-b px-3 pb-2">
           <svg class="mr-2 h-4 w-4 shrink-0 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"></circle>
             <path d="m21 21-4.35-4.35"></path>
           </svg>
           <input
             v-model="searchQuery"
-            :placeholder="searchPlaceholder || 'Search...'"
+            :placeholder="content.searchPlaceholder || 'Search...'"
             class="flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
             @keydown.escape="closeSelect"
           />
@@ -97,7 +97,7 @@
             v-if="filteredOptions.length === 0"
             class="py-6 text-center text-sm text-muted-foreground"
           >
-            {{ noOptionsText || 'No options found.' }}
+            {{ content.noOptionsText || 'No options found.' }}
           </div>
         </div>
       </div>
@@ -150,10 +150,10 @@ const selectVariants = (props) => {
 }
 
 // Computed properties
-const options = computed(() => props.options || [])
+const options = computed(() => props.content.options || [])
 
 const filteredOptions = computed(() => {
-  if (!props.searchable || !searchQuery.value) {
+  if (!props.content.searchable || !searchQuery.value) {
     return options.value
   }
   
@@ -168,7 +168,7 @@ const selectedOption = computed(() => {
   
   return options.value.find(option => {
     if (typeof option === 'object') {
-      return option[props.valueKey || 'value'] === props.modelValue
+      return option[props.content.valueKey || 'value'] === props.modelValue
     }
     return option === props.modelValue
   })
@@ -178,14 +178,14 @@ const selectedOption = computed(() => {
 const getDisplayValue = (option) => {
   if (!option) return ''
   if (typeof option === 'object') {
-    return option[props.labelKey || 'label'] || option[props.valueKey || 'value'] || ''
+    return option[props.content.labelKey || 'label'] || option[props.content.valueKey || 'value'] || ''
   }
   return String(option)
 }
 
 const getOptionValue = (option) => {
   if (typeof option === 'object') {
-    return option[props.valueKey || 'value']
+    return option[props.content.valueKey || 'value']
   }
   return option
 }
@@ -201,7 +201,7 @@ const isSelected = (option) => {
 
 // Methods
 const toggleSelect = () => {
-  if (props.disabled) return
+  if (props.content.disabled) return
   
   if (isOpen.value) {
     closeSelect()
@@ -269,7 +269,7 @@ const updateContentPosition = () => {
 }
 
 const handleKeyDown = (event) => {
-  if (props.disabled) return
+  if (props.content.disabled) return
   
   switch (event.key) {
     case 'Enter':
